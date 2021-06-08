@@ -1,11 +1,11 @@
-version: '3.1'
+version: '3'
 services:
   solr:
-    image: solr:6.6
+    image: solr
     ports:
      - "8983:8983"
     volumes:
-      - data:/opt/solr/server/solr/mycores
+      - data:/opt/solr/server/solr/mycores/
     entrypoint:
       - docker-entrypoint.sh
       - solr-precreate
