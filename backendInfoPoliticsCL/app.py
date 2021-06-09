@@ -15,9 +15,12 @@ def ping():
 #Frontend will send the query format
 #comuna: {{name}} AND name: {{Andres}}
 #"comuna" in query:
-@app.route('/searchComuna/<string:document_name>')
-def searchComuna(document_name):
-    response = solr.search(q="comuna:" + document_name)
+#q=query
+#start=<numToStart>
+#rows=<amountOfRows>
+@app.route('/search/<string:document_name>')
+def search(document_name):
+    response = solr.search(q=document_name ,rows=100)
     returnValue = []
     for result in response:
         returnValue.append(format(result))
