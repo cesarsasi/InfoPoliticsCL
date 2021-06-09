@@ -1,13 +1,27 @@
 from flask import Flask, jsonify, request
+import pysolr
+from documents import documents
 
 app = Flask(__name__)
+solr = pysolr.Solr('http://localhost:8983/solr/mycore')
 
-from documents import documents
 
 # Testing Route
 @app.route('/ping', methods=['GET'])
 def ping():
     return jsonify({'response': 'pong!'})
+#TODO: start and end check
+#Search route
+#Frontend will send the query format
+#comuna: {{name}} AND name: {{Andres}}
+#"comuna" in query:
+@app.route('/searchComuna/<string:document_name>')
+def searchComuna(document_name):
+    response = solr.search(q="comuna:" + document_name)
+    returnValue = []
+    for result in response:
+        returnValue.append(format(result))
+    return jsonify(returnValue)
 
 # Get Data Routes
 @app.route('/documents')
