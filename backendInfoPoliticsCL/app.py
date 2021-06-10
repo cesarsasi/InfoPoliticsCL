@@ -1,8 +1,10 @@
 from flask import Flask, jsonify, request
+from flask_cors import CORS
 import pysolr
 from documents import documents
 
 app = Flask(__name__)
+CORS(app)
 solr = pysolr.Solr('http://localhost:8983/solr/mycore')
 
 
