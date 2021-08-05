@@ -6,6 +6,7 @@ from documents import documents
 app = Flask(__name__)
 CORS(app)
 solr = pysolr.Solr('http://localhost:8983/solr/mycore')
+solrNews = pysolr.Solr('http://localhost:8983/solr/news')
 
 
 # Testing Route
@@ -26,7 +27,37 @@ def search(document_name):
     returnValue = []
     for result in response:
         returnValue.append(format(result))
+    #returnValue = "".join(returnValue)
     return jsonify(returnValue)
+
+@app.route('/search/news')
+def allNews():
+    response = solrNews.search(q="*:*",rows=100)
+    returnValue = []
+    for result in response:
+        returnValue.append(format(result))
+    return jsonify(returnValue)
+
+@app.route('/search/news/<string:political_name>')
+def allNewsByPolitical(political_name):
+    query = "name:"
+    query += political_name
+    response = solrNews.search(q=query,rows=100)
+    returnValue = []
+    for result in response:
+        returnValue.append(format(result))
+    return jsonify(returnValue)
+
+@app.route('/search/news/<string:political_name>/count_news')
+def countNews(political_name):
+    query = "name:"
+    query += political_name
+    response = solrNews.search(q=query,rows=100)
+    returnValue = []
+    for result in response:
+        returnValue.append(format(result))
+    count = str(len(returnValue))
+    return jsonify(count)
 
 # Get Data Routes
 @app.route('/documents')
